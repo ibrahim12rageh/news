@@ -1,10 +1,10 @@
+import 'package:application_news/model/SourceResponse.dart';
 import 'package:flutter/material.dart';
 
  class MySearchDelegate extends SearchDelegate {
+
   List<String> searchResults=[
-    'usa',
-    'brazil',
-    'egypt'
+
   ];
 
   @override

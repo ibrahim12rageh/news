@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 class  NewsWidget extends StatefulWidget {
   Source source;
-
+  int numberPage = 1;
   NewsWidget({required this.source});
 
   @override
@@ -55,18 +55,33 @@ class _NewsWidgetState extends State<NewsWidget> {
             );
           }
           var newsList = snapshot.data?.articles ?? [];
-          return ListView.builder(
-              itemBuilder: (context,index){
-                return InkWell(
-                  onTap: (){
-                    Navigator.of(context).pushNamed(NewsContent.routeName,arguments: {
-                      'nameSource' : widget.source.name,
-                      'magazine' : newsList[index]
-                    });
-                  },
-                    child: NewsItem(news: newsList[index]));
-              },
-          itemCount: newsList.length,
+          return NotificationListener<ScrollNotification>(
+            onNotification: (notification){
+              print(notification);
+              if(notification.metrics.pixels == notification.metrics.maxScrollExtent){
+                print('loading');
+                widget.numberPage++;
+                print('go page ${widget.numberPage}');
+                ApiManager.getNewsBySourceId(widget.source.id ?? '',numberPage: widget.numberPage);
+                // setState(() {
+                //
+                // });
+              }
+              return true;
+            },
+            child: ListView.builder(
+                itemBuilder: (context,index){
+                  return InkWell(
+                    onTap: (){
+                      Navigator.of(context).pushNamed(NewsContent.routeName,arguments: {
+                        'nameSource' : widget.source.name,
+                        'magazine' : newsList[index]
+                      });
+                    },
+                      child: NewsItem(news: newsList[index]));
+                },
+            itemCount: newsList.length,
+            ),
           );
 
         });

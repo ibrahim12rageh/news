@@ -27,10 +27,12 @@ class ApiManager{
 /*
 https://newsapi.org/v2/everything?apiKey=0371277408f9488c96c7d876439de322
 */
-  static Future<NewsResponse?> getNewsBySourceId(String sourceId) async{
+  static Future<NewsResponse?> getNewsBySourceId(String sourceId,{String search = '',int numberPage = 1}) async{
     Uri url = Uri.https(ApiConstant.baseUrl,ApiConstant.newsApi,{
       'apikey' : '0371277408f9488c96c7d876439de322',
       'sources' : sourceId,
+      'q' : search,
+      'page' : '$numberPage'
     });
 
     try{
